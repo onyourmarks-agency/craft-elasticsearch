@@ -1,5 +1,5 @@
 {
-    "name": "la-haute-societe/craft-elasticsearch",
+    "name": "oym/craft-elasticsearch",
     "description": "Bring the power of Elasticsearch to your Craft CMS projects.",
     "type": "craft-plugin",
     "keywords": [
