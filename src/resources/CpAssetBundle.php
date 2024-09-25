@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2018 La Haute Société
  */
 
-namespace lhs\elasticsearch\resources;
+namespace oym\elasticsearch\resources;
 
 
 use craft\web\AssetBundle;

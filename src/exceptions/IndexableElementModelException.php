@@ -1,8 +1,8 @@
 <?php
 
-namespace lhs\elasticsearch\exceptions;
+namespace oym\elasticsearch\exceptions;
 
-use lhs\elasticsearch\models\IndexableElementModel;
+use oym\elasticsearch\models\IndexableElementModel;
 use Throwable;
 
 class IndexableElementModelException extends Exception

@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2018 La Haute Société
  */
 
-namespace lhs\elasticsearch\exceptions;
+namespace oym\elasticsearch\exceptions;
 
 class IndexElementException extends Exception
 {

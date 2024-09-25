@@ -8,11 +8,11 @@
  * @copyright Copyright (c) 2018 La Haute Société
  */
 
-namespace lhs\elasticsearch\models;
+namespace oym\elasticsearch\models;
 
 use Craft;
 use craft\base\Model;
-use lhs\elasticsearch\Elasticsearch;
+use oym\elasticsearch\Elasticsearch;
 use yii\base\InvalidConfigException;
 
 /**

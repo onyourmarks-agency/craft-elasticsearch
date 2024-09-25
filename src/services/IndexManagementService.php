@@ -8,16 +8,16 @@
  * @copyright Copyright (c) 2018 La Haute Société
  */
 
-namespace lhs\elasticsearch\services;
+namespace oym\elasticsearch\services;
 
 
 use Craft;
 use craft\base\Component;
 use craft\records\Site;
-use lhs\elasticsearch\Elasticsearch as ElasticsearchPlugin;
-use lhs\elasticsearch\events\ErrorEvent;
-use lhs\elasticsearch\exceptions\IndexElementException;
-use lhs\elasticsearch\records\ElasticsearchRecord;
+use oym\elasticsearch\Elasticsearch as ElasticsearchPlugin;
+use oym\elasticsearch\events\ErrorEvent;
+use oym\elasticsearch\exceptions\IndexElementException;
+use oym\elasticsearch\records\ElasticsearchRecord;
 
 /**
  */

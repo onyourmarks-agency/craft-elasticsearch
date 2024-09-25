@@ -9,7 +9,7 @@ Bring the power of Elasticsearch to your Craft CMS projects.
 
 ## Requirements
 
-This plugin works with **Craft CMS 3 or 4**.
+This plugin works with **Craft CMS 5**.
 
 In order to index data, you will need an **Elasticsearch 6.0** (or later)
 instance, with the **Ingest attachment processor** plugin activated.

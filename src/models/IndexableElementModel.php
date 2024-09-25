@@ -1,6 +1,6 @@
 <?php
 
-namespace lhs\elasticsearch\models;
+namespace oym\elasticsearch\models;
 
 use Craft;
 use craft\base\Element;
@@ -8,7 +8,7 @@ use craft\commerce\elements\Product;
 use craft\digitalproducts\elements\Product as DigitalProduct;
 use craft\elements\Asset;
 use craft\elements\Entry;
-use lhs\elasticsearch\exceptions\IndexableElementModelException;
+use oym\elasticsearch\exceptions\IndexableElementModelException;
 
 /**
  *

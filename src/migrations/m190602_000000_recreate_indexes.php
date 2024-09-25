@@ -4,11 +4,11 @@
  * @copyright Copyright (c) 2019 La Haute Société
  */
 
-namespace lhs\elasticsearch\migrations;
+namespace oym\elasticsearch\migrations;
 
 use craft\db\Migration;
-use lhs\elasticsearch\Elasticsearch;
-use lhs\elasticsearch\Elasticsearch as ElasticsearchPlugin;
+use oym\elasticsearch\Elasticsearch;
+use oym\elasticsearch\Elasticsearch as ElasticsearchPlugin;
 
 /**
  * UpdateSchema class

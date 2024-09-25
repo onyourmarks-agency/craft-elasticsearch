@@ -8,10 +8,10 @@
  * @copyright Copyright (c) 2018 La Haute Société
  */
 
-namespace lhs\elasticsearch\variables;
+namespace oym\elasticsearch\variables;
 
-use lhs\elasticsearch\Elasticsearch;
-use lhs\elasticsearch\records\ElasticsearchRecord;
+use oym\elasticsearch\Elasticsearch;
+use oym\elasticsearch\records\ElasticsearchRecord;
 
 /**
  * This Twig variable allows running searches from the frontend templates

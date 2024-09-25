@@ -8,12 +8,12 @@
  * @copyright Copyright (c) 2018 La Haute Société
  */
 
-namespace lhs\elasticsearch\jobs;
+namespace oym\elasticsearch\jobs;
 
 use Craft;
 use craft\queue\BaseJob;
-use lhs\elasticsearch\Elasticsearch;
-use lhs\elasticsearch\models\IndexableElementModel;
+use oym\elasticsearch\Elasticsearch;
+use oym\elasticsearch\models\IndexableElementModel;
 
 /**
  * Reindex a single entry

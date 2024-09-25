@@ -1,6 +1,6 @@
 <?php
 
-namespace lhs\elasticsearch\exceptions;
+namespace oym\elasticsearch\exceptions;
 
 use Craft;
 use Throwable;

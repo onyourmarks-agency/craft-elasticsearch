@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2018 La Haute Société
  */
 
-namespace lhs\elasticsearch;
+namespace oym\elasticsearch;
 
 use Craft;
 use craft\base\Element;
@@ -31,14 +31,14 @@ use craft\services\Utilities;
 use craft\web\Application;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
-use lhs\elasticsearch\exceptions\IndexElementException;
-use lhs\elasticsearch\models\SettingsModel;
-use lhs\elasticsearch\services\ElasticsearchService;
-use lhs\elasticsearch\services\ElementIndexerService;
-use lhs\elasticsearch\services\IndexManagementService;
-use lhs\elasticsearch\services\ReindexQueueManagementService;
-use lhs\elasticsearch\utilities\RefreshElasticsearchIndexUtility;
-use lhs\elasticsearch\variables\ElasticsearchVariable;
+use oym\elasticsearch\exceptions\IndexElementException;
+use oym\elasticsearch\models\SettingsModel;
+use oym\elasticsearch\services\ElasticsearchService;
+use oym\elasticsearch\services\ElementIndexerService;
+use oym\elasticsearch\services\IndexManagementService;
+use oym\elasticsearch\services\ReindexQueueManagementService;
+use oym\elasticsearch\utilities\RefreshElasticsearchIndexUtility;
+use oym\elasticsearch\variables\ElasticsearchVariable;
 use yii\base\Event;
 use yii\debug\Module as DebugModule;
 use yii\elasticsearch\Connection;

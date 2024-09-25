@@ -1,6 +1,6 @@
 <?php
 
-namespace lhs\elasticsearch\migrations;
+namespace oym\elasticsearch\migrations;
 
 use Craft;
 use craft\db\Migration;

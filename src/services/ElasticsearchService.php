@@ -12,7 +12,7 @@
  * @copyright Copyright (c) 2018 La Haute Société
  */
 
-namespace lhs\elasticsearch\services;
+namespace oym\elasticsearch\services;
 
 use Craft;
 use craft\base\Component;
@@ -23,11 +23,11 @@ use craft\elements\Entry;
 use craft\errors\SiteNotFoundException;
 use craft\helpers\ArrayHelper;
 use craft\web\Application;
-use lhs\elasticsearch\Elasticsearch as ElasticsearchPlugin;
-use lhs\elasticsearch\events\ErrorEvent;
-use lhs\elasticsearch\exceptions\IndexElementException;
-use lhs\elasticsearch\models\IndexableElementModel;
-use lhs\elasticsearch\records\ElasticsearchRecord;
+use oym\elasticsearch\Elasticsearch as ElasticsearchPlugin;
+use oym\elasticsearch\events\ErrorEvent;
+use oym\elasticsearch\exceptions\IndexElementException;
+use oym\elasticsearch\models\IndexableElementModel;
+use oym\elasticsearch\records\ElasticsearchRecord;
 
 /**
  * Service used to interact with the Elasticsearch instance

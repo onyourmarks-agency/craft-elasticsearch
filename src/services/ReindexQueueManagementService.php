@@ -8,13 +8,13 @@
  * @copyright Copyright (c) 2018 La Haute Société
  */
 
-namespace lhs\elasticsearch\services;
+namespace oym\elasticsearch\services;
 
 use Craft;
 use craft\base\Component;
-use lhs\elasticsearch\Elasticsearch;
-use lhs\elasticsearch\jobs\IndexElementJob;
-use lhs\elasticsearch\models\IndexableElementModel;
+use oym\elasticsearch\Elasticsearch;
+use oym\elasticsearch\jobs\IndexElementJob;
+use oym\elasticsearch\models\IndexableElementModel;
 
 /**
  * Service used to manage the reindex job queue.

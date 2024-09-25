@@ -8,16 +8,16 @@
  * @copyright Copyright (c) 2018 La Haute Société
  */
 
-namespace lhs\elasticsearch\controllers;
+namespace oym\elasticsearch\controllers;
 
 use Craft;
 use craft\helpers\UrlHelper;
 use craft\records\Site;
 use craft\web\Controller;
 use craft\web\Request;
-use lhs\elasticsearch\Elasticsearch;
-use lhs\elasticsearch\Elasticsearch as ElasticsearchPlugin;
-use lhs\elasticsearch\models\IndexableElementModel;
+use oym\elasticsearch\Elasticsearch;
+use oym\elasticsearch\Elasticsearch as ElasticsearchPlugin;
+use oym\elasticsearch\models\IndexableElementModel;
 use yii\helpers\VarDumper;
 use yii\web\Response;
 

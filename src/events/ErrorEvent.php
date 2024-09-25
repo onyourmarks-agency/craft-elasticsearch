@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2018 La Haute Société
  */
 
-namespace lhs\elasticsearch\events;
+namespace oym\elasticsearch\events;
 
 use yii\base\Event;
 

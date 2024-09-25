@@ -23,19 +23,25 @@
         }
     ],
     "require": {
-        "craftcms/cms": "^4.0.0",
+        "craftcms/cms": "^5.0.0",
         "yiisoft/yii2-elasticsearch": "^2.1.0"
     },
     "autoload": {
         "psr-4": {
-            "lhs\\elasticsearch\\": "src/"
+            "oym\\elasticsearch\\": "src/"
         }
     },
     "extra": {
         "name": "Elasticsearch",
         "handle": "elasticsearch",
-        "schemaVersion": "1.3.0",
-        "changelogUrl": "https://raw.githubusercontent.com/la-haute-societe/craft-elasticsearch/master/CHANGELOG.md",
-        "class": "lhs\\elasticsearch\\Elasticsearch"
+        "schemaVersion": "2.0.0",
+        "changelogUrl": "https://raw.githubusercontent.com/onyourmarks-agency/craft-elasticsearch/master/CHANGELOG.md",
+        "class": "oym\\elasticsearch\\Elasticsearch"
+    },
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true,
+            "craftcms/plugin-installer": true
+        }
     }
 }

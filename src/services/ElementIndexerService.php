@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2018 La Haute Société
  */
 
-namespace lhs\elasticsearch\services;
+namespace oym\elasticsearch\services;
 
 use Craft;
 use craft\base\Component;
@@ -20,9 +20,9 @@ use craft\elements\Entry;
 use craft\errors\SiteNotFoundException;
 use craft\helpers\Db;
 use craft\helpers\UrlHelper;
-use lhs\elasticsearch\Elasticsearch as ElasticsearchPlugin;
-use lhs\elasticsearch\exceptions\IndexElementException;
-use lhs\elasticsearch\records\ElasticsearchRecord;
+use oym\elasticsearch\Elasticsearch as ElasticsearchPlugin;
+use oym\elasticsearch\exceptions\IndexElementException;
+use oym\elasticsearch\records\ElasticsearchRecord;
 
 /**
  */

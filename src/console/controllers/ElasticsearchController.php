@@ -8,11 +8,11 @@
  * @copyright Copyright (c) 2018 La Haute Société
  */
 
-namespace lhs\elasticsearch\console\controllers;
+namespace oym\elasticsearch\console\controllers;
 
-use lhs\elasticsearch\Elasticsearch as ElasticsearchPlugin;
-use lhs\elasticsearch\exceptions\IndexElementException;
-use lhs\elasticsearch\models\IndexableElementModel;
+use oym\elasticsearch\Elasticsearch as ElasticsearchPlugin;
+use oym\elasticsearch\exceptions\IndexElementException;
+use oym\elasticsearch\models\IndexableElementModel;
 use yii\console\Controller;
 use yii\console\ExitCode;
 use yii\helpers\Console;

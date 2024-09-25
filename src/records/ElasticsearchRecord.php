@@ -8,14 +8,14 @@
  * @copyright Copyright (c) 2018 La Haute Société
  */
 
-namespace lhs\elasticsearch\records;
+namespace oym\elasticsearch\records;
 
 use Craft;
 use craft\base\Element;
 use craft\helpers\ArrayHelper;
 use craft\helpers\Db;
-use lhs\elasticsearch\Elasticsearch as ElasticsearchPlugin;
-use lhs\elasticsearch\events\SearchEvent;
+use oym\elasticsearch\Elasticsearch as ElasticsearchPlugin;
+use oym\elasticsearch\events\SearchEvent;
 use yii\base\Event;
 use yii\base\InvalidConfigException;
 use yii\elasticsearch\ActiveRecord;
