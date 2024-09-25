@@ -1,11 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Elasticsearch plugin for Craft CMS 3.x
  *
  * Bring the power of Elasticsearch to you Craft 3 CMS project
  *
  * @link      https://www.lahautesociete.com
- * @copyright Copyright (c) 2018 La Haute Société
  */
 
 namespace lhs\elasticsearch\utilities;
@@ -96,11 +98,11 @@ class RefreshElasticsearchIndexUtility extends Utility
                         'pluginSettingsLink' => sprintf(
                             '<a href="%s">%s</a>',
                             UrlHelper::cpUrl('settings/plugins/' . Elasticsearch::PLUGIN_HANDLE),
-                            Craft::t(Elasticsearch::PLUGIN_HANDLE, 'plugin\'s settings')
+                            Craft::t(Elasticsearch::PLUGIN_HANDLE, 'plugin\'s settings'),
                         ),
-                    ]
+                    ],
                 ),
-            ]
+            ],
         );
     }
 }

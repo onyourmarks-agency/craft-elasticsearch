@@ -1,11 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Elasticsearch plugin for Craft CMS 3.x
  *
  * Bring the power of Elasticsearch to you Craft 3 CMS project
  *
  * @link      https://www.lahautesociete.com
- * @copyright Copyright (c) 2018 La Haute Société
  */
 
 namespace oym\elasticsearch;
@@ -74,7 +76,7 @@ class Elasticsearch extends Plugin
                 'reindexQueueManagementService' => ReindexQueueManagementService::class,
                 'elementIndexerService'         => ElementIndexerService::class,
                 'indexManagementService'        => IndexManagementService::class,
-            ]
+            ],
         );
 
         $this->initializeElasticConnector();
@@ -97,7 +99,7 @@ class Elasticsearch extends Plugin
                     } catch (Exception $e) {
                         // Noop, the element must have already been deleted
                     }
-                }
+                },
             );
 
             // Index entry, asset & products upon save (creation or update)
@@ -119,7 +121,7 @@ class Elasticsearch extends Plugin
                     if ($event->plugin === $this) {
                         $this->onPluginSettingsSaved();
                     }
-                }
+                },
             );
 
             // On reindex job success, remove its id from the cache (cache is used to keep track of reindex jobs and clear those having failed before reindexing all entries)
@@ -128,38 +130,38 @@ class Elasticsearch extends Plugin
                 Queue::EVENT_AFTER_EXEC,
                 function (ExecEvent $event) {
                     $this->reindexQueueManagementService->removeJob($event->id);
-                }
+                },
             );
 
             // Register the plugin's CP utility
             Event::on(
                 Utilities::class,
                 Utilities::EVENT_REGISTER_UTILITY_TYPES,
-                function (RegisterComponentTypesEvent $event) {
+                static function (RegisterComponentTypesEvent $event) {
                     $event->types[] = RefreshElasticsearchIndexUtility::class;
-                }
+                },
             );
 
             // Register our CP routes
             Event::on(
                 UrlManager::class,
                 UrlManager::EVENT_REGISTER_CP_URL_RULES,
-                function (RegisterUrlRulesEvent $event) {
+                static function (RegisterUrlRulesEvent $event) {
                     $event->rules['elasticsearch/cp/test-connection'] = 'elasticsearch/cp/test-connection';
                     $event->rules['elasticsearch/cp/reindex-perform-action'] = 'elasticsearch/cp/reindex-perform-action';
-                }
+                },
             );
 
             // Display a flash message if the ingest attachment plugin isn't activated on the Elasticsearch instance
             Event::on(
                 self::class,
                 self::EVENT_ERROR_NO_ATTACHMENT_PROCESSOR,
-                function () {
+                static function () {
                     $application = Craft::$app;
                     if ($application instanceof \yii\web\Application) {
                         $application->getSession()->setError('The ingest-attachment plugin seems to be missing on your Elasticsearch instance.');
                     }
-                }
+                },
             );
         }
 
@@ -167,7 +169,7 @@ class Elasticsearch extends Plugin
         Event::on(
             Application::class,
             Application::EVENT_BEFORE_REQUEST,
-            function () {
+            static function () {
                 /** @var DebugModule|null $debugModule */
                 $debugModule = Craft::$app->getModule('debug');
                 if ($debugModule) {
@@ -175,32 +177,32 @@ class Elasticsearch extends Plugin
                         [
                             'id'     => 'elasticsearch',
                             'module' => $debugModule,
-                        ]
+                        ],
                     );
                 }
-            }
+            },
         );
 
         // Register variables
         Event::on(
             CraftVariable::class,
             CraftVariable::EVENT_INIT,
-            function (Event $event) {
+            static function (Event $event) {
                 /** @var CraftVariable $variable */
                 $variable = $event->sender;
                 $variable->set('elasticsearch', ElasticsearchVariable::class);
-            }
+            },
         );
 
         // Register our site routes (used by the console commands to reindex entries)
         Event::on(
             UrlManager::class,
             UrlManager::EVENT_REGISTER_SITE_URL_RULES,
-            function (RegisterUrlRulesEvent $event) {
+            static function (RegisterUrlRulesEvent $event) {
                 $event->rules['elasticsearch/get-all-elements'] = 'elasticsearch/site/get-all-elements';
                 $event->rules['elasticsearch/reindex-all'] = 'elasticsearch/site/reindex-all';
                 $event->rules['elasticsearch/reindex-element'] = 'elasticsearch/site/reindex-element';
-            }
+            },
         );
 
         Craft::info("{$this->name} plugin loaded", __METHOD__);
@@ -239,18 +241,14 @@ class Elasticsearch extends Plugin
         $sections = ArrayHelper::map(
             Craft::$app->sections->getAllSections(),
             'id',
-            function (Section $section): array {
-                return [
+            static fn (Section $section): array => [
                     'label' => Craft::t('site', $section->name),
                     'types' => ArrayHelper::map(
                         $section->getEntryTypes(),
                         'id',
-                        function ($section): array {
-                            return ['label' => Craft::t('site', $section->name)];
-                        }
+                        static fn ($section): array => ['label' => Craft::t('site', $section->name)],
                     ),
-                ];
-            }
+                ],
         );
 
         return Craft::$app->view->renderTemplate(
@@ -259,7 +257,7 @@ class Elasticsearch extends Plugin
                 'settings'  => $settings,
                 'overrides' => array_keys($overrides),
                 'sections'  => $sections,
-            ]
+            ],
         );
     }
 
@@ -334,10 +332,10 @@ class Elasticsearch extends Plugin
                     $node['http']['publish_address'] = sprintf(
                         '%s://%s',
                         $node['protocol'] ?? 'http',
-                        $node['http_address']
+                        $node['http_address'],
                     );
                 }
-            }
+            },
         );
 
         /** @noinspection PhpUnhandledExceptionInspection Can't happen since a valid config array is passed */
@@ -362,9 +360,6 @@ class Elasticsearch extends Plugin
         return class_exists(\craft\digitalproducts\Plugin::class);
     }
 
-    /**
-     * @param ModelEvent $event
-     */
     public function onElementSaved(ModelEvent $event): void
     {
         /** @var Element $element */

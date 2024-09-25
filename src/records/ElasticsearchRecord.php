@@ -1,11 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Elasticsearch plugin for Craft CMS 3.x
  *
  * Bring the power of Elasticsearch to you Craft 3 CMS project
  *
  * @link      https://www.lahautesociete.com
- * @copyright Copyright (c) 2018 La Haute Société
  */
 
 namespace oym\elasticsearch\records;
@@ -218,7 +220,7 @@ class ElasticsearchRecord extends ActiveRecord
             'sv'    => 'swedish',
             'tr'    => 'turkish',
             'th'    => 'thai',
-            'zh'    => 'cjk' //Chinese
+            'zh'    => 'cjk', //Chinese
         ];
 
         $siteLanguage = Craft::$app->getSites()->getSiteById(static::$siteId)->language;
@@ -255,7 +257,7 @@ class ElasticsearchRecord extends ActiveRecord
         $this->setSchema(
             [
                 'mappings' => $mapping,
-            ]
+            ],
         );
         $this->trigger(self::EVENT_BEFORE_CREATE_INDEX, new Event());
         Craft::debug('Before create event - site: ' . self::$siteId . ' schema: ' . VarDumper::dumpAsString($this->getSchema()), __METHOD__);
@@ -298,8 +300,8 @@ class ElasticsearchRecord extends ActiveRecord
                             ],
                         ],
                     ],
-                ]
-            )
+                ],
+            ),
         );
 
         $db->put(static::index(), ['include_type_name' => 'false'], Json::encode($schema));
@@ -399,9 +401,6 @@ class ElasticsearchRecord extends ActiveRecord
         $this->_attributes = ArrayHelper::merge($this->_attributes, $attributes);
     }
 
-    /**
-     * @return Element
-     */
     public function getElement(): Element
     {
         return $this->_element;
@@ -494,7 +493,7 @@ class ElasticsearchRecord extends ActiveRecord
                     'fields' => [
                         'attachment.content' => (object)[],
                     ],
-                ]
+                ],
             );
         }
         return $this->_highlightParams;
@@ -508,17 +507,11 @@ class ElasticsearchRecord extends ActiveRecord
         $this->_highlightParams = $highlightParams;
     }
 
-    /**
-     * @return array
-     */
     public function getSearchFields(): array
     {
         return $this->_searchFields;
     }
 
-    /**
-     * @param array $searchFields
-     */
     public function setSearchFields(array $searchFields)
     {
         $this->_searchFields = $searchFields;

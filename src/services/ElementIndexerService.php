@@ -1,11 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Elasticsearch plugin for Craft CMS 3.x
  *
  * Bring the power of Elasticsearch to you Craft 3 CMS project
  *
  * @link      https://www.lahautesociete.com
- * @copyright Copyright (c) 2018 La Haute Société
  */
 
 namespace oym\elasticsearch\services;
@@ -115,12 +117,14 @@ class ElementIndexerService extends Component
      */
     protected function getReasonForNotReindexing(Element $element): ?string
     {
-        if (!(
+        if (
+            !(
             $element instanceof Entry
             || $element instanceof Product
             || $element instanceof DigitalProduct
             || $element instanceof Asset
-        )) {
+            )
+        ) {
             $message = "Not indexing entry #{$element->id} since it is not an entry, an asset, a product or a digital product.";
             Craft::debug($message, __METHOD__);
             return $message;
@@ -208,7 +212,7 @@ class ElementIndexerService extends Component
                 [
                     'commerce/products-preview/view-shared-product',
                     ['productId' => $element->id, 'siteId' => $element->siteId],
-                ]
+                ],
             );
         } else {
             $schemaVersion = Craft::$app->getInstalledSchemaVersion();
@@ -224,14 +228,14 @@ class ElementIndexerService extends Component
                             'draftId'     => null,
                             'revisionId'  => null,
                         ],
-                    ]
+                    ],
                 );
             } else {
                 $token = Craft::$app->getTokens()->createToken(
                     [
                         'entries/view-shared-entry',
                         ['entryId' => $element->id, 'siteId' => $element->siteId],
-                    ]
+                    ],
                 );
             }
         }
@@ -254,18 +258,16 @@ class ElementIndexerService extends Component
                 Craft::t(
                     ElasticsearchPlugin::PLUGIN_HANDLE,
                     'An error occurred while parsing the element page content: {previousExceptionMessage}',
-                    ['previousExceptionMessage' => $e->getMessage()]
-                ), 0, $e
+                    ['previousExceptionMessage' => $e->getMessage()],
+                ),
+                0,
+                $e,
             );
         }
 
         return false;
     }
 
-    /**
-     * @param $html
-     * @return string
-     */
     protected function extractIndexablePart(string $html): string
     {
         /** @noinspection NullPointerExceptionInspection NPE cannot happen here. */
@@ -280,10 +282,6 @@ class ElementIndexerService extends Component
         return trim($html);
     }
 
-    /**
-     * @param Element $element
-     * @return ElasticsearchRecord
-     */
     protected function getElasticRecordForElement(Element $element): ElasticsearchRecord
     {
         ElasticsearchRecord::$siteId = $element->siteId;

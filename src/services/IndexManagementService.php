@@ -1,15 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Elasticsearch plugin for Craft CMS 3.x
  *
  * Bring the power of Elasticsearch to you Craft 3 CMS project
  *
  * @link      https://www.lahautesociete.com
- * @copyright Copyright (c) 2018 La Haute Société
  */
 
 namespace oym\elasticsearch\services;
-
 
 use Craft;
 use craft\base\Component;
@@ -91,8 +92,10 @@ class IndexManagementService extends Component
                 throw new IndexElementException(
                     Craft::t(
                         ElasticsearchPlugin::PLUGIN_HANDLE,
-                        'Cannot recreate empty indexes for all sites'
-                    ), 0, $e
+                        'Cannot recreate empty indexes for all sites',
+                    ),
+                    0,
+                    $e,
                 );
             }
         }
@@ -109,7 +112,7 @@ class IndexManagementService extends Component
             /** @noinspection NullPointerExceptionInspection */
             ElasticsearchPlugin::getInstance()->trigger(
                 ElasticsearchPlugin::EVENT_ERROR_NO_ATTACHMENT_PROCESSOR,
-                new ErrorEvent($e)
+                new ErrorEvent($e),
             );
         }
     }

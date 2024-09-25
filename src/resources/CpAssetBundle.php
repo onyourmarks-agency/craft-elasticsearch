@@ -1,15 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Elasticsearch plugin for Craft CMS 3.x
  *
  * Bring the power of Elasticsearch to you Craft 3 CMS project
  *
  * @link      https://www.lahautesociete.com
- * @copyright Copyright (c) 2018 La Haute Société
  */
 
 namespace oym\elasticsearch\resources;
-
 
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;

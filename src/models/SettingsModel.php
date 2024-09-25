@@ -1,11 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Elasticsearch plugin for Craft CMS 3.x
  *
  * Bring the power of Elasticsearch to you Craft 3 CMS project
  *
  * @link      https://www.lahautesociete.com
- * @copyright Copyright (c) 2018 La Haute Société
  */
 
 namespace oym\elasticsearch\models;
@@ -142,8 +144,8 @@ class SettingsModel extends Model
                 Craft::t(
                     Elasticsearch::PLUGIN_HANDLE,
                     'Could not connect to the Elasticsearch instance at {elasticsearchEndpoint}. Please check the endpoint URL and authentication settings.',
-                    ['elasticsearchEndpoint' => $this->elasticsearchEndpoint]
-                )
+                    ['elasticsearchEndpoint' => $this->elasticsearchEndpoint],
+                ),
             );
         } finally {
             // Clean up the mess we made to run the validation
@@ -154,9 +156,7 @@ class SettingsModel extends Model
         // Cleanup blacklistedEntryTypes to remove empty values
         $this->blacklistedEntryTypes = array_filter(
             $this->blacklistedEntryTypes,
-            function ($value) {
-                return !empty($value);
-            }
+            static fn ($value) => !empty($value),
         );
 
         parent::afterValidate();

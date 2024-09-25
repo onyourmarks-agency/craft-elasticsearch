@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /** @noinspection PhpUndefinedNamespaceInspection */
 
 /** @noinspection PhpUndefinedClassInspection */
@@ -9,7 +12,6 @@
  * Bring the power of Elasticsearch to you Craft 3 CMS project
  *
  * @link      https://www.lahautesociete.com
- * @copyright Copyright (c) 2018 La Haute Société
  */
 
 namespace oym\elasticsearch\services;
@@ -108,9 +110,9 @@ class ElasticsearchService extends Component
                                 'Site %s: %d indexable elements, %d in Elasticsearch index.',
                                 $site->handle,
                                 $countIdexableElements,
-                                $countEsRecords
+                                $countEsRecords,
                             ),
-                            __METHOD__
+                            __METHOD__,
                         );
 
                         if ($countIdexableElements !== $countEsRecords) {
@@ -124,7 +126,7 @@ class ElasticsearchService extends Component
 
                     return true;
                 },
-                300
+                300,
             );
         } catch (\yii\elasticsearch\Exception $e) {
             $elasticsearchEndpoint = $this->plugin->getSettings()->elasticsearchEndpoint;
@@ -136,8 +138,8 @@ class ElasticsearchService extends Component
                     Craft::t(
                         ElasticsearchPlugin::PLUGIN_HANDLE,
                         'Could not connect to the Elasticsearch server at {elasticsearchEndpoint}. Please check the host and authentication settings.',
-                        ['elasticsearchEndpoint' => $elasticsearchEndpoint]
-                    )
+                        ['elasticsearchEndpoint' => $elasticsearchEndpoint],
+                    ),
                 );
             }
 
@@ -171,8 +173,10 @@ class ElasticsearchService extends Component
                 throw new IndexElementException(
                     Craft::t(
                         ElasticsearchPlugin::PLUGIN_HANDLE,
-                        'Cannot fetch the id of the current site. Please make sure at least one site is enabled.'
-                    ), 0, $e
+                        'Cannot fetch the id of the current site. Please make sure at least one site is enabled.',
+                    ),
+                    0,
+                    $e,
                 );
             }
         }
@@ -220,8 +224,10 @@ class ElasticsearchService extends Component
                 Craft::t(
                     ElasticsearchPlugin::PLUGIN_HANDLE,
                     'An error occurred while running the "{searchQuery}" search query on Elasticsearch instance: {previousExceptionMessage}',
-                    ['previousExceptionMessage' => $e->getMessage(), 'searchQuery' => $query]
-                ), 0, $e
+                    ['previousExceptionMessage' => $e->getMessage(), 'searchQuery' => $query],
+                ),
+                0,
+                $e,
             );
         }
     }
@@ -273,7 +279,7 @@ class ElasticsearchService extends Component
                 $model->type = Entry::class;
                 return $model;
             },
-            $entries
+            $entries,
         );
     }
 
@@ -307,7 +313,7 @@ class ElasticsearchService extends Component
                 $model->type = Product::class;
                 return $model;
             },
-            $products
+            $products,
         );
     }
 
@@ -341,7 +347,7 @@ class ElasticsearchService extends Component
                 $model->type = DigitalProduct::class;
                 return $model;
             },
-            $digitalProducts
+            $digitalProducts,
         );
     }
 
@@ -373,7 +379,7 @@ class ElasticsearchService extends Component
                 $model->type = Asset::class;
                 return $model;
             },
-            $entries
+            $entries,
         );
     }
 
@@ -425,15 +431,11 @@ class ElasticsearchService extends Component
             /** @noinspection NullPointerExceptionInspection */
             ElasticsearchPlugin::getInstance()->trigger(
                 ElasticsearchPlugin::EVENT_ERROR_NO_ATTACHMENT_PROCESSOR,
-                new ErrorEvent($e)
+                new ErrorEvent($e),
             );
         }
     }
 
-    /**
-     * @param int $siteId
-     * @return int
-     */
     protected function countIndexableEntries(int $siteId): int
     {
         $countEntries = (int)$this->getIndexableEntriesQuery($siteId)->count();

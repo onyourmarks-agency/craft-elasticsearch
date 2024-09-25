@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace oym\elasticsearch\exceptions;
 
 use oym\elasticsearch\models\IndexableElementModel;
@@ -13,21 +15,21 @@ class IndexableElementModelException extends Exception
     public const DIGITAL_PRODUCTS_NOT_INSTALLED = 3;
 
 
-    public function __construct(IndexableElementModel $model, $code, Throwable $previous = null)
+    public function __construct(IndexableElementModel $model, $code, ?Throwable $previous = null)
     {
         switch ($code) {
             case self::CRAFT_COMMERCE_NOT_INSTALLED:
                 $message = sprintf(
                     "Element #%d (site #%d) is a product but the Craft Commerce plugin isn't installed.",
                     $model->elementId,
-                    $model->siteId
+                    $model->siteId,
                 );
                 break;
             case self::DIGITAL_PRODUCTS_NOT_INSTALLED:
                 $message = sprintf(
                     "Element #%d (site #%d) is a digital product but the Digital Products plugin isn't installed.",
                     $model->elementId,
-                    $model->siteId
+                    $model->siteId,
                 );
                 break;
             case self::ELEMENT_NOT_FOUND:
@@ -35,7 +37,7 @@ class IndexableElementModelException extends Exception
                     'Element #%d (site #%d) not found (type: %s)',
                     $model->elementId,
                     $model->siteId,
-                    $model->type
+                    $model->type,
                 );
                 break;
             case self::UNEXPECTED_TYPE:
@@ -43,7 +45,7 @@ class IndexableElementModelException extends Exception
                     'Unexpected type (%s) for element #%s (site #%s).',
                     $model->type,
                     $model->elementId,
-                    $model->siteId
+                    $model->siteId,
                 );
                 break;
             default:
@@ -52,6 +54,4 @@ class IndexableElementModelException extends Exception
 
         parent::__construct($message, $code, $previous);
     }
-
-
 }
