@@ -4,6 +4,8 @@
 
 Bring the power of Elasticsearch to your Craft CMS projects.
 
+### This is a fork of this project: https://github.com/la-haute-societe/craft-elasticsearch
+
 ![Plugin screenshot](resources/img/plugin-screenshot.png)
 
 
@@ -23,7 +25,7 @@ Just install the plugin from the Craft Plugin Store.
 
 ### Using Composer
 
-  - Install with Composer from your project directory: `composer require la-haute-societe/craft-elasticsearch`
+  - Install with Composer from your project directory: `composer require oym/craft-elasticsearch`
   - In the Craft Control Panel, go to Settings → Plugins and click the **Install** button for Elasticsearch.
 
 
