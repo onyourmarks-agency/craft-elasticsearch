@@ -86,7 +86,7 @@ class ElasticsearchService extends Component
         try {
             return $application->cache->getOrSet(
                 self::getSyncCachekey(),
-                static function (): bool {
+                 function (): bool {
                     Craft::debug('isIndexInSync cache miss', __METHOD__);
 
                     if (!self::testConnection()) {
