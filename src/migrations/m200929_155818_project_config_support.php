@@ -21,7 +21,7 @@ class m200929_155818_project_config_support extends Migration
         $ids = $projectConfig->get('plugins.elasticsearch.settings.blacklistedEntryTypes');
 
         $IdToHandleMapping = ArrayHelper::map(
-            Craft::$app->sections->getAllEntryTypes(),
+            Craft::$app->entries->getAllEntryTypes(),
             static function (EntryType $entryType) { return $entryType->id; },
             static function (EntryType $entryType) { return $entryType->handle; }
         );

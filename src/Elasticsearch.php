@@ -247,7 +247,7 @@ class Elasticsearch extends Plugin
         $overrides = Craft::$app->getConfig()->getConfigFromFile(strtolower($this->handle));
 
         $sections = ArrayHelper::map(
-            Craft::$app->sections->getAllSections(),
+            Craft::$app->entries->getAllSections(),
             'id',
             static fn (Section $section): array => [
                     'label' => Craft::t('site', $section->name),
