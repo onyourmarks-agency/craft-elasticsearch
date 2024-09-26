@@ -89,7 +89,7 @@ class ElasticsearchService extends Component
                 static function (): bool {
                     Craft::debug('isIndexInSync cache miss', __METHOD__);
 
-                    if (!$this::testConnection()) {
+                    if (!self::testConnection()) {
                         return false;
                     }
 
