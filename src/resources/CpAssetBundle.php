@@ -28,7 +28,7 @@ class CpAssetBundle extends AssetBundle
     public function init()
     {
         // define the path that your publishable resources live
-        $this->sourcePath = '@lhs/elasticsearch/resources/cp';
+        $this->sourcePath = '@oym/elasticsearch/resources/cp';
 
         // define the dependencies
         $this->depends = [

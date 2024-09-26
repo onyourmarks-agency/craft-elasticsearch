@@ -52,7 +52,7 @@ class RefreshElasticsearchIndexUtility extends Utility
      */
     public static function iconPath(): ?string
     {
-        return Craft::getAlias('@lhs/elasticsearch/resources/cp/img/utility-icon.svg');
+        return Craft::getAlias('@oym/elasticsearch/resources/cp/img/utility-icon.svg');
     }
 
     /**
