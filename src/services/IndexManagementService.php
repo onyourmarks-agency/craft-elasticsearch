@@ -21,13 +21,14 @@ use oym\elasticsearch\Elasticsearch as ElasticsearchPlugin;
 use oym\elasticsearch\events\ErrorEvent;
 use oym\elasticsearch\exceptions\IndexElementException;
 use oym\elasticsearch\records\ElasticsearchRecord;
+use yii\base\InvalidConfigException;
+use yii\elasticsearch\Exception;
 
 /**
  */
 class IndexManagementService extends Component
 {
-    /** @var ElasticsearchPlugin */
-    public $plugin;
+    public ElasticsearchPlugin $plugin;
 
     public function init(): void
     {
@@ -39,6 +40,8 @@ class IndexManagementService extends Component
     /**
      * Create an Elasticsearch index for the giver site
      * @param int $siteId
+     * @throws InvalidConfigException
+     * @throws Exception
      */
     public function createSiteIndex(int $siteId): void
     {
@@ -65,7 +68,7 @@ class IndexManagementService extends Component
     /**
      * Re-create the Elasticsearch index of sites matching any of `$siteIds`
      * @param int[] $siteIds
-     * @noinspection PhpRedundantCatchClauseInspection Exception may be thrown by \yii\elasticsearch\Connection::delete()
+     * @throws InvalidConfigException
      */
     public function recreateSiteIndex(int ...$siteIds): void
     {

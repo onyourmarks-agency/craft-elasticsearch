@@ -16,10 +16,16 @@ namespace oym\elasticsearch\utilities;
 
 use Craft;
 use craft\base\Utility;
+use craft\errors\MissingComponentException;
 use craft\helpers\ArrayHelper;
 use craft\helpers\UrlHelper;
 use oym\elasticsearch\Elasticsearch;
 use oym\elasticsearch\resources\CpAssetBundle;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use yii\base\Exception;
+use yii\base\InvalidConfigException;
 
 /**
  * A Control Panel utility to force reindexing site entries
@@ -76,9 +82,12 @@ class RefreshElasticsearchIndexUtility extends Utility
     /**
      * Returns the utility's content HTML.
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
-     * @throws \yii\base\InvalidConfigException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws MissingComponentException
+     * @throws Exception
+     * @throws InvalidConfigException
      */
     public static function contentHtml(): string
     {

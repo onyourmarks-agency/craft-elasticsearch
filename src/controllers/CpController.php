@@ -30,8 +30,7 @@ use yii\web\Response;
  */
 class CpController extends Controller
 {
-    /** @var ElasticsearchPlugin */
-    public $plugin;
+    public ElasticsearchPlugin $plugin;
 
     protected array|bool|int $allowAnonymous = ['testConnection', 'reindexPerformAction'];
 

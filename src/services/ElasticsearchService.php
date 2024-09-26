@@ -20,6 +20,7 @@ use craft\commerce\elements\Product;
 use craft\digitalproducts\elements\Product as DigitalProduct;
 use craft\elements\Asset;
 use craft\elements\Entry;
+use craft\errors\MissingComponentException;
 use craft\errors\SiteNotFoundException;
 use craft\helpers\ArrayHelper;
 use craft\web\Application;
@@ -34,8 +35,7 @@ use oym\elasticsearch\records\ElasticsearchRecord;
  */
 class ElasticsearchService extends Component
 {
-    /** @var ElasticsearchPlugin */
-    public $plugin;
+    public ElasticsearchPlugin $plugin;
 
     public function init(): void
     {
@@ -77,6 +77,7 @@ class ElasticsearchService extends Component
      * Check whether Elasticsearch is in sync with Craft
      * @return bool `true` if Elasticsearch is in sync with Craft, `false` otherwise.
      * @noinspection PhpRedundantCatchClauseInspection \yii\elasticsearch\Exception may be thrown by \yii\elasticsearch\Connection::get()
+     * @throws MissingComponentException
      */
     public function isIndexInSync(): bool
     {
@@ -85,10 +86,10 @@ class ElasticsearchService extends Component
         try {
             return $application->cache->getOrSet(
                 self::getSyncCachekey(),
-                function (): int {
+                static function (): bool {
                     Craft::debug('isIndexInSync cache miss', __METHOD__);
 
-                    if ($this->testConnection() === false) {
+                    if (!$this->testConnection()) {
                         return false;
                     }
 
@@ -100,24 +101,24 @@ class ElasticsearchService extends Component
 
                         Craft::debug('Checking Elasticsearch index for site #' . $site->id, __METHOD__);
 
-                        $countIdexableElements = $this->countIndexableEntries($site->id);
+                        $countIndexableElements = $this->countIndexableEntries($site->id);
                         $countEsRecords = (int)ElasticsearchRecord::find()->count();
 
                         Craft::debug(
                             sprintf(
                                 'Site %s: %d indexable elements, %d in Elasticsearch index.',
                                 $site->handle,
-                                $countIdexableElements,
+                                $countIndexableElements,
                                 $countEsRecords,
                             ),
                             __METHOD__,
                         );
 
-                        if ($countIdexableElements !== $countEsRecords) {
+                        if ($countIndexableElements !== $countEsRecords) {
                             $outOfSync = true;
                         }
                     }
-                    if ($outOfSync === true) {
+                    if ($outOfSync) {
                         Craft::debug('Elasticsearch reindex needed!', __METHOD__);
                         return false;
                     }
@@ -158,13 +159,13 @@ class ElasticsearchService extends Component
      * @throws IndexElementException
      *                         TODO: Throw a more specific exception
      */
-    public function search(string $query, $siteId = null): array
+    public function search(string $query, int $siteId = null): array
     {
         if ($query === '') {
             return [];
         }
 
-        if ($siteId === null) {
+        if (!$siteId) {
             try {
                 $siteId = Craft::$app->getSites()->getCurrentSite()->id;
             } catch (SiteNotFoundException $e) {
@@ -234,7 +235,7 @@ class ElasticsearchService extends Component
      * @param int[]|null $siteIds
      * @return array
      */
-    public function getIndexableElementModels($siteIds = null): array
+    public function getIndexableElementModels(array $siteIds = null): array
     {
         $models = $this->getIndexableEntryModels($siteIds);
         $models = \yii\helpers\ArrayHelper::merge($models, $this->getIndexableAssetModels($siteIds));
@@ -254,7 +255,7 @@ class ElasticsearchService extends Component
      * @param int[]|null $siteIds An array containing the ids of sites to be or reindexed, or `null` to reindex all sites.
      * @return array An array of entry descriptors. An entry descriptor is an associative array with the `elementId`, `siteId` and `type` keys.
      */
-    public function getIndexableEntryModels($siteIds = null): array
+    public function getIndexableEntryModels(array $siteIds = null): array
     {
         if ($siteIds === null) {
             $siteIds = Craft::$app->getSites()->getAllSiteIds();
@@ -288,7 +289,7 @@ class ElasticsearchService extends Component
      * @return array An array of elements descriptors. An entry descriptor is an
      *                            associative array with the `elementId` and `siteId` keys.
      */
-    public function getIndexableProductModels($siteIds = null): array
+    public function getIndexableProductModels(array $siteIds = null): array
     {
         if ($siteIds === null) {
             $siteIds = Craft::$app->getSites()->getAllSiteIds();
@@ -322,7 +323,7 @@ class ElasticsearchService extends Component
      * @return array An array of elements descriptors. An entry descriptor is an
      *                            associative array with the `elementId` and `siteId` keys.
      */
-    public function getIndexableDigitalProductModels($siteIds = null): array
+    public function getIndexableDigitalProductModels(array $siteIds = null): array
     {
         if ($siteIds === null) {
             $siteIds = Craft::$app->getSites()->getAllSiteIds();
@@ -354,7 +355,7 @@ class ElasticsearchService extends Component
      * @param int[]|null $siteIds An array containing the ids of sites to be or reindexed, or `null` to reindex all sites.
      * @return array An array of asset descriptors. An asset descriptor is an associative array with the `elementId`, `siteId` and `type` keys.
      */
-    public function getIndexableAssetModels($siteIds = null): array
+    public function getIndexableAssetModels(array $siteIds = null): array
     {
         if ($siteIds === null) {
             $siteIds = Craft::$app->getSites()->getAllSiteIds();
@@ -399,7 +400,7 @@ class ElasticsearchService extends Component
             ->volume(ArrayHelper::merge(['not'], $this->plugin->getSettings()->blacklistedAssetVolumes));
     }
 
-    public function getIndexableProductsQuery($siteId)
+    public function getIndexableProductsQuery($siteId): \craft\commerce\elements\db\ProductQuery|\craft\elements\db\ElementQueryInterface
     {
         return Product::find()
             ->status([Entry::STATUS_PENDING, Entry::STATUS_LIVE])
@@ -407,7 +408,7 @@ class ElasticsearchService extends Component
             ->uri(['not', '']);
     }
 
-    public function getIndexableDigitalProductsQuery($siteId)
+    public function getIndexableDigitalProductsQuery($siteId): \craft\digitalproducts\elements\db\ProductQuery|\craft\elements\db\ElementQueryInterface
     {
         return DigitalProduct::find()
             ->status([Entry::STATUS_PENDING, Entry::STATUS_LIVE])

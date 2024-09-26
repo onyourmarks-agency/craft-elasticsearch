@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace oym\elasticsearch\variables;
 
 use oym\elasticsearch\Elasticsearch;
+use oym\elasticsearch\exceptions\IndexElementException;
 use oym\elasticsearch\records\ElasticsearchRecord;
 
 /**
@@ -27,10 +28,10 @@ class ElasticsearchVariable
      *     {{ craft.elasticsearch.results(query) }}
      * @param string $query String to search for
      * @return ElasticsearchRecord[]
-     * @throws \oym\elasticsearch\exceptions\IndexElementException
+     * @throws IndexElementException
      */
-    public function search($query): array
+    public function search(string $query = ''): array
     {
-        return Elasticsearch::getInstance()->service->search($query ?? '');
+        return Elasticsearch::getInstance()->service->search($query);
     }
 }

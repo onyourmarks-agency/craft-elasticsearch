@@ -19,6 +19,7 @@ use oym\elasticsearch\exceptions\IndexElementException;
 use oym\elasticsearch\models\IndexableElementModel;
 use yii\console\Controller;
 use yii\console\ExitCode;
+use yii\helpers\BaseConsole;
 use yii\helpers\Console;
 
 /**
@@ -26,8 +27,7 @@ use yii\helpers\Console;
  */
 class ElasticsearchController extends Controller
 {
-    /** @var ElasticsearchPlugin */
-    public $plugin;
+    public ElasticsearchPlugin $plugin;
 
     public function init(): void
     {
@@ -146,7 +146,7 @@ class ElasticsearchController extends Controller
     protected function reindexElements(array $indexableElementModels, string $type): int
     {
         $this->stdout(PHP_EOL);
-        $this->stdout("Craft Elasticsearch plugin | Reindex $type", Console::FG_GREEN);
+        $this->stdout("Craft Elasticsearch plugin | Reindex $type", BaseConsole::FG_GREEN);
         $this->stdout(PHP_EOL);
 
         // Reindex elements
@@ -172,9 +172,9 @@ class ElasticsearchController extends Controller
 
         // Print summary message
         $this->stdout(PHP_EOL);
-        $message = $this->ansiFormat('Done', Console::FG_GREEN);
+        $message = $this->ansiFormat('Done', BaseConsole::FG_GREEN);
         if ($exitCode > 0) {
-            $message = $this->ansiFormat('Done with errors', Console::FG_RED);
+            $message = $this->ansiFormat('Done with errors', BaseConsole::FG_RED);
         }
         $this->stdout($message);
         $this->stdout(PHP_EOL);

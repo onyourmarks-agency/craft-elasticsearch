@@ -28,12 +28,9 @@ use oym\elasticsearch\Elasticsearch as ElasticsearchPlugin;
 use oym\elasticsearch\exceptions\IndexElementException;
 use oym\elasticsearch\records\ElasticsearchRecord;
 
-/**
- */
 class ElementIndexerService extends Component
 {
-    /** @var ElasticsearchPlugin */
-    public $plugin;
+    public ElasticsearchPlugin $plugin;
 
     public function init(): void
     {
@@ -67,15 +64,13 @@ class ElementIndexerService extends Component
         $expiryDate = $element instanceof Asset ? null : $element->expiryDate;
 
         $esRecord = $this->getElasticRecordForElement($element);
-        //@formatter:off
         $esRecord->title         = $element->title;
         $esRecord->url           = $element->url;
         $esRecord->postDate      = $postDate ? Db::prepareDateForDb($postDate) : null;
-        $esRecord->noPostDate    = $postDate ? false : true;
+        $esRecord->noPostDate    = !$postDate;
         $esRecord->expiryDate    = $expiryDate ? Db::prepareDateForDb($expiryDate) : null;
-        $esRecord->noExpiryDate  = $expiryDate ? false : true;
+        $esRecord->noExpiryDate  = !$expiryDate;
         $esRecord->elementHandle = $element->refHandle();
-        //@formatter:on
 
         $content = $this->getElementContent($element);
         if ($content === false) {
@@ -176,7 +171,7 @@ class ElementIndexerService extends Component
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws IndexElementException
      */
-    protected function getElementContent(Element $element)
+    protected function getElementContent(Element $element): bool|string
     {
         if ($callback = $this->plugin->getSettings()->elementContentCallback) {
             return $callback($element);
@@ -192,7 +187,7 @@ class ElementIndexerService extends Component
      * @throws IndexElementException If anything goes wrong. Check the previous property of the exception to get more details
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    protected function getElementIndexableContent(Element $element)
+    protected function getElementIndexableContent(Element $element): bool|string
     {
         Craft::debug('Getting element page content : ' . $element->url, __METHOD__);
 
@@ -208,7 +203,6 @@ class ElementIndexerService extends Component
         // Request a sharable url for element in order to get content for pending ones
 
         // First generate a token for shared view
-        /** @noinspection PhpUndefinedClassInspection */
         if ($element instanceof Product) {
             $token = Craft::$app->getTokens()->createToken(
                 [
@@ -250,7 +244,7 @@ class ElementIndexerService extends Component
         try {
             $res = $client->request('GET', $url);
             if ($res->getStatusCode() === 200) {
-                return $this->extractIndexablePart($res->getBody());
+                return $this->extractIndexablePart($res->getBody()->getContents());
             }
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             Craft::error('Could not get element content: ' . $e->getMessage(), __METHOD__);
@@ -272,7 +266,6 @@ class ElementIndexerService extends Component
 
     protected function extractIndexablePart(string $html): string
     {
-        /** @noinspection NullPointerExceptionInspection NPE cannot happen here. */
         if ($callback = ElasticsearchPlugin::getInstance()->getSettings()->contentExtractorCallback) {
             $html = $callback($html);
         }
@@ -287,8 +280,6 @@ class ElementIndexerService extends Component
     protected function getElasticRecordForElement(Element $element): ElasticsearchRecord
     {
         ElasticsearchRecord::$siteId = $element->siteId;
-
-        /** @var ElasticsearchRecord|null $esRecord */
         $esRecord = ElasticsearchRecord::findOne($element->id);
 
         if ($esRecord === null) {

@@ -24,29 +24,29 @@ use yii\base\InvalidConfigException;
  */
 class SettingsModel extends Model
 {
-    /** @var string The Elasticsearch instance endpoint URL (with protocol, host and port) */
-    public $elasticsearchEndpoint = 'elasticsearch:9200';
+    /** The Elasticsearch instance endpoint URL (with protocol, host and port) */
+    public string $elasticsearchEndpoint = 'elasticsearch:9200';
 
-    /** @var bool A boolean indicating whether authentication to the Elasticsearch server is required */
-    public $isAuthEnabled = false;
+    /** A boolean indicating whether authentication to the Elasticsearch server is required */
+    public bool $isAuthEnabled = false;
 
-    /** @var string [optional] The username used to connect to the Elasticsearch server */
-    public $username = 'elastic';
+    /** [optional] The username used to connect to the Elasticsearch server */
+    public string $username = 'elastic';
 
-    /** @var string [optional] The password used to connect to the Elasticsearch server */
-    public $password = 'MagicWord';
+    /** [optional] The password used to connect to the Elasticsearch server */
+    public string $password = 'MagicWord';
 
-    /** @var string [optional] Index name prefix used to avoid index name collision when using a single Elasticsearch
+    /** [optional] Index name prefix used to avoid index name collision when using a single Elasticsearch
      *                         instance with several Craft instances.
      *                         Up to 5 characters, all lowercase.
      */
-    public $indexNamePrefix;
+    public string $indexNamePrefix;
 
-    /** @var array A list of handles of entries types that should not be indexed */
-    public $blacklistedEntryTypes = [];
+    /** A list of handles of entries types that should not be indexed */
+    public array $blacklistedEntryTypes = [];
 
-    /** @var array A list of handles of asset volumes that should not be indexed */
-    public $blacklistedAssetVolumes = [];
+    /** A list of handles of asset volumes that should not be indexed */
+    public array $blacklistedAssetVolumes = [];
 
     /**
      * @var callable A callback used to extract the indexable content from a page source code.
@@ -66,21 +66,21 @@ class SettingsModel extends Model
      */
     public $resultFormatterCallback;
 
-    /** @var array The tags inserted before and after the search term to highlight in search results */
-    public $highlight = [
+    /** The tags inserted before and after the search term to highlight in search results */
+    public array $highlight = [
         'pre_tags'  => '',
         'post_tags' => '',
     ];
 
     /**
-     * @var array An associative array passed to the yii2-elasticsearch component Connection class constructor.
+     * An associative array passed to the yii2-elasticsearch component Connection class constructor.
      * @note If this is set, the $elasticsearchEndpoint, $username, $password and $isAuthEnabled properties will be ignored.
      * @see  https://www.yiiframework.com/extension/yiisoft/yii2-elasticsearch/doc/api/2.1/yii-elasticsearch-connection#properties
      */
-    public $elasticsearchComponentConfig;
+    public ?array $elasticsearchComponentConfig;
 
     /**
-     * @var array An associative array defining additional fields to be indexed along with the defaults one.
+     * An associative array defining additional fields to be indexed along with the defaults one.
      * Each additional field should be declared as the name of the attribute as the key and an associative array for the value
      * in which the keys can be:
      * - `mapping`: an array providing the elasticsearch mapping definition for the field. For example:
@@ -98,7 +98,7 @@ class SettingsModel extends Model
      *   }
      *   ```
      */
-    public $extraFields = [];
+    public array $extraFields = [];
 
     /**
      * Returns the validation rules for attributes.
@@ -119,7 +119,7 @@ class SettingsModel extends Model
         ];
     }
 
-    public function afterValidate()
+    public function afterValidate(): void
     {
         if ($this->elasticsearchComponentConfig !== null) {
             parent::afterValidate();
@@ -151,7 +151,6 @@ class SettingsModel extends Model
             );
         } finally {
             // Clean up the mess we made to run the validation
-            /** @noinspection PhpUnhandledExceptionInspection Shouldn't happen as the component to set is already initialized */
             Craft::$app->set(Elasticsearch::PLUGIN_HANDLE, $previousElasticConnector);
         }
 

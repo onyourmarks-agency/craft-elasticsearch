@@ -21,5 +21,5 @@ use yii\base\Event;
  **/
 class SearchEvent extends Event
 {
-    public $query;
+    public string $query;
 }

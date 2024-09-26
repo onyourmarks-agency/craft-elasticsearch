@@ -6,6 +6,7 @@ namespace oym\elasticsearch\models;
 
 use Craft;
 use craft\base\Element;
+use craft\base\Model;
 use craft\commerce\elements\Product;
 use craft\digitalproducts\elements\Product as DigitalProduct;
 use craft\elements\Asset;
@@ -16,17 +17,17 @@ use oym\elasticsearch\exceptions\IndexableElementModelException;
  *
  * @property-read Element $element
  */
-class IndexableElementModel extends \craft\base\Model implements \JsonSerializable
+class IndexableElementModel extends Model implements \JsonSerializable
 {
-    public $elementId;
-    public $siteId;
-    public $type;
+    public int $elementId;
+    public int $siteId;
+    public string $type;
 
     /**
      * @return Element
      * @throws IndexableElementModelException
      */
-    public function getElement()
+    public function getElement(): Element
     {
         switch ($this->type) {
             case Product::class:
@@ -61,7 +62,7 @@ class IndexableElementModel extends \craft\base\Model implements \JsonSerializab
     }
 
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->toArray();
     }

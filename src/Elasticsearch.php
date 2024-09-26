@@ -22,6 +22,7 @@ use craft\digitalproducts\elements\Product as DigitalProduct;
 use craft\console\Application as ConsoleApplication;
 use craft\elements\Asset;
 use craft\elements\Entry;
+use craft\errors\MissingComponentException;
 use craft\events\ModelEvent;
 use craft\events\PluginEvent;
 use craft\events\RegisterComponentTypesEvent;
@@ -44,11 +45,13 @@ use oym\elasticsearch\services\ReindexQueueManagementService;
 use oym\elasticsearch\utilities\RefreshElasticsearchIndexUtility;
 use oym\elasticsearch\variables\ElasticsearchVariable;
 use yii\base\Event;
+use yii\base\InvalidConfigException;
 use yii\debug\Module as DebugModule;
 use yii\elasticsearch\Connection;
 use yii\elasticsearch\DebugPanel;
 use yii\elasticsearch\Exception;
 use yii\queue\ExecEvent;
+use yii\queue\Queue as QueueAlias;
 
 /**
  * @property  services\ElasticsearchService          service
@@ -61,11 +64,14 @@ use yii\queue\ExecEvent;
  */
 class Elasticsearch extends Plugin
 {
-    public const EVENT_ERROR_NO_ATTACHMENT_PROCESSOR = 'errorNoAttachmentProcessor';
-    public const PLUGIN_HANDLE = 'elasticsearch';
+    public const string EVENT_ERROR_NO_ATTACHMENT_PROCESSOR = 'errorNoAttachmentProcessor';
+    public const string PLUGIN_HANDLE = 'elasticsearch';
 
     public bool $hasCpSettings = true;
 
+    /**
+     * @throws InvalidConfigException
+     */
     public function init(): void
     {
         parent::init();
@@ -92,7 +98,7 @@ class Elasticsearch extends Plugin
             // Remove entry from the index upon deletion
             Event::on(
                 Entry::class,
-                Entry::EVENT_AFTER_DELETE,
+                Element::EVENT_AFTER_DELETE,
                 function (Event $event) {
                     /** @var entry $entry */
                     $entry = $event->sender;
@@ -105,13 +111,13 @@ class Elasticsearch extends Plugin
             );
 
             // Index entry, asset & products upon save (creation or update)
-            Event::on(Entry::class, Entry::EVENT_AFTER_SAVE, [$this, 'onElementSaved']);
-            Event::on(Asset::class, Asset::EVENT_AFTER_SAVE, [$this, 'onElementSaved']);
+            Event::on(Entry::class, Element::EVENT_AFTER_SAVE, [$this, 'onElementSaved']);
+            Event::on(Asset::class, Element::EVENT_AFTER_SAVE, [$this, 'onElementSaved']);
             if ($isCommerceEnabled) {
-                Event::on(Product::class, Product::EVENT_AFTER_SAVE, [$this, 'onElementSaved']);
+                Event::on(Product::class, Element::EVENT_AFTER_SAVE, [$this, 'onElementSaved']);
 
                 if ($isDigitalProductsEnabled) {
-                    Event::on(DigitalProduct::class, DigitalProduct::EVENT_AFTER_SAVE, [$this, 'onElementSaved']);
+                    Event::on(DigitalProduct::class, Element::EVENT_AFTER_SAVE, [$this, 'onElementSaved']);
                 }
             }
 
@@ -129,7 +135,7 @@ class Elasticsearch extends Plugin
             // On reindex job success, remove its id from the cache (cache is used to keep track of reindex jobs and clear those having failed before reindexing all entries)
             Event::on(
                 Queue::class,
-                Queue::EVENT_AFTER_EXEC,
+                QueueAlias::EVENT_AFTER_EXEC,
                 function (ExecEvent $event) {
                     $this->reindexQueueManagementService->removeJob($event->id);
                 },
@@ -138,7 +144,7 @@ class Elasticsearch extends Plugin
             // Register the plugin's CP utility
             Event::on(
                 Utilities::class,
-                Utilities::EVENT_REGISTER_UTILITY_TYPES,
+                Utilities::EVENT_REGISTER_UTILITIES,
                 static function (RegisterComponentTypesEvent $event) {
                     $event->types[] = RefreshElasticsearchIndexUtility::class;
                 },
@@ -288,9 +294,9 @@ class Elasticsearch extends Plugin
      * @param SettingsModel|null $settings
      * @throws \yii\base\InvalidConfigException If the configuration passed to the yii2-elasticsearch module is invalid
      */
-    public function initializeElasticConnector($settings = null): void
+    public function initializeElasticConnector(SettingsModel $settings = null): void
     {
-        if ($settings === null) {
+        if (!$settings) {
             $settings = $this->getSettings();
         }
 
@@ -387,10 +393,13 @@ class Elasticsearch extends Plugin
         }
     }
 
+    /**
+     * @throws MissingComponentException
+     * @throws InvalidConfigException
+     */
     protected function onPluginSettingsSaved(): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection If there was an error in the configuration, it would have prevented validation */
-        $this->initializeElasticConnector(); //FIXME: Check if this is needed
+        $this->initializeElasticConnector();
 
         Craft::debug('Elasticsearch plugin settings saved => re-index all elements', __METHOD__);
         try {

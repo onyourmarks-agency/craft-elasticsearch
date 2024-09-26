@@ -22,7 +22,9 @@ use oym\elasticsearch\Elasticsearch as ElasticsearchPlugin;
 use oym\elasticsearch\events\SearchEvent;
 use yii\base\Event;
 use yii\base\InvalidConfigException;
+use yii\db\StaleObjectException;
 use yii\elasticsearch\ActiveRecord;
+use yii\elasticsearch\Connection;
 use yii\elasticsearch\Exception;
 use yii\helpers\Json;
 use yii\helpers\VarDumper;
@@ -39,18 +41,18 @@ use yii\helpers\VarDumper;
  */
 class ElasticsearchRecord extends ActiveRecord
 {
-    const EVENT_BEFORE_CREATE_INDEX = 'beforeCreateIndex';
-    const EVENT_BEFORE_SAVE = 'beforeSave';
-    const EVENT_BEFORE_SEARCH = 'beforeSearch';
-    public static $siteId;
-    private $_schema;
-    private $_attributes = ['title', 'url', 'elementHandle', 'content', 'postDate', 'expiryDate', 'noPostDate', 'noExpiryDate'];
-    private $_element;
-    private $_queryParams;
-    private $_highlightParams;
-    private $_searchFields = ['attachment.content', 'title'];
+    const string EVENT_BEFORE_CREATE_INDEX = 'beforeCreateIndex';
+    const string EVENT_BEFORE_SAVE = 'beforeSave';
+    const string EVENT_BEFORE_SEARCH = 'beforeSearch';
+    public static int $siteId;
+    private mixed $_schema;
+    private array $_attributes = ['title', 'url', 'elementHandle', 'content', 'postDate', 'expiryDate', 'noPostDate', 'noExpiryDate'];
+    private Element $_element;
+    private mixed $_queryParams;
+    private mixed $_highlightParams;
+    private array $_searchFields = ['attachment.content', 'title'];
 
-    public static function type()
+    public static function type(): string
     {
         return '_doc';
     }
@@ -63,7 +65,7 @@ class ElasticsearchRecord extends ActiveRecord
         return $this->_attributes;
     }
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -80,7 +82,7 @@ class ElasticsearchRecord extends ActiveRecord
      * @return bool
      * @throws InvalidConfigException
      * @throws \yii\db\Exception
-     * @throws \yii\db\StaleObjectException
+     * @throws StaleObjectException
      * @throws Exception
      */
     public function save($runValidation = true, $attributeNames = null): bool
@@ -112,9 +114,10 @@ class ElasticsearchRecord extends ActiveRecord
     }
 
     /**
-     * @return mixed|\yii\elasticsearch\Connection
+     * @return Connection
+     * @throws InvalidConfigException
      */
-    public static function getDb()
+    public static function getDb(): Connection
     {
         return ElasticsearchPlugin::getConnection();
     }
@@ -145,9 +148,8 @@ class ElasticsearchRecord extends ActiveRecord
      * @param string $query
      * @return ElasticsearchRecord[]
      * @throws InvalidConfigException
-     * @throws Exception
      */
-    public function search(string $query)
+    public function search(string $query): array
     {
         // Add extra fields to search parameters
         $extraFields = ElasticsearchPlugin::getInstance()->getSettings()->extraFields;
@@ -239,7 +241,11 @@ class ElasticsearchRecord extends ActiveRecord
         return $analyzer;
     }
 
-    public function createESIndex()
+    /**
+     * @throws Exception
+     * @throws InvalidConfigException
+     */
+    public function createESIndex(): void
     {
         $mapping = static::mapping();
         // Add extra fields to the mapping definition
@@ -269,11 +275,11 @@ class ElasticsearchRecord extends ActiveRecord
     /**
      * Create this model's index in Elasticsearch
      * @param array $schema The Elascticsearch index definition schema
-     * @param bool  $force
+     * @param bool $force
      * @throws InvalidConfigException If the `$siteId` isn't set
      * @throws Exception If an error occurs while communicating with the Elasticsearch server
      */
-    public static function createIndex(array $schema, $force = false)
+    public static function createIndex(array $schema, bool $force = false): void
     {
         $db = static::getDb();
         $command = $db->createCommand();
@@ -311,9 +317,9 @@ class ElasticsearchRecord extends ActiveRecord
 
     /**
      * Delete this model's index
-     * @throws InvalidConfigException If the `$siteId` isn't set
+     * @throws InvalidConfigException|Exception If the `$siteId` isn't set
      */
-    public static function deleteIndex()
+    public static function deleteIndex(): void
     {
         $db = static::getDb();
         $command = $db->createCommand();
@@ -329,7 +335,7 @@ class ElasticsearchRecord extends ActiveRecord
     public static function mapping(): array
     {
         $analyzer = self::siteAnalyzer();
-        $mapping = [
+        return [
             'properties' => [
                 'title'         => [
                     'type'     => 'text',
@@ -378,14 +384,12 @@ class ElasticsearchRecord extends ActiveRecord
                 ],
             ],
         ];
-
-        return $mapping;
     }
 
     /**
      * @return mixed
      */
-    public function getSchema()
+    public function getSchema(): mixed
     {
         return $this->_schema;
     }
@@ -393,12 +397,12 @@ class ElasticsearchRecord extends ActiveRecord
     /**
      * @param mixed $schema
      */
-    public function setSchema($schema)
+    public function setSchema($schema): void
     {
         $this->_schema = $schema;
     }
 
-    public function addAttributes(array $attributes)
+    public function addAttributes(array $attributes): void
     {
         $this->_attributes = ArrayHelper::merge($this->_attributes, $attributes);
     }
@@ -411,17 +415,17 @@ class ElasticsearchRecord extends ActiveRecord
     /**
      * @param mixed $element
      */
-    public function setElement(Element $element)
+    public function setElement(Element $element): void
     {
         $this->_element = $element;
     }
 
     /**
-     * @param $query the search value input
+     * @param string $query
      * @return mixed
      * @throws InvalidConfigException
      */
-    public function getQueryParams($query)
+    public function getQueryParams(string $query): mixed
     {
         if ($this->_queryParams === null) {
             $currentTimeDb = Db::prepareDateForDb(new \DateTime());
@@ -478,7 +482,7 @@ class ElasticsearchRecord extends ActiveRecord
     /**
      * @param mixed $queryParams
      */
-    public function setQueryParams($queryParams)
+    public function setQueryParams(mixed $queryParams): void
     {
         $this->_queryParams = $queryParams;
     }
@@ -486,7 +490,7 @@ class ElasticsearchRecord extends ActiveRecord
     /**
      * @return mixed
      */
-    public function getHighlightParams()
+    public function getHighlightParams(): mixed
     {
         if (is_null($this->_highlightParams)) {
             $this->_highlightParams = ArrayHelper::merge(
@@ -504,7 +508,7 @@ class ElasticsearchRecord extends ActiveRecord
     /**
      * @param mixed $highlightParams
      */
-    public function setHighlightParams($highlightParams)
+    public function setHighlightParams(mixed $highlightParams): void
     {
         $this->_highlightParams = $highlightParams;
     }
@@ -514,7 +518,7 @@ class ElasticsearchRecord extends ActiveRecord
         return $this->_searchFields;
     }
 
-    public function setSearchFields(array $searchFields)
+    public function setSearchFields(array $searchFields): void
     {
         $this->_searchFields = $searchFields;
     }
@@ -522,7 +526,7 @@ class ElasticsearchRecord extends ActiveRecord
     /**
      * Return if the Elasticsearch index already exists or not
      * @return bool
-     * @throws InvalidConfigException If the `$siteId` isn't set*
+     * @throws InvalidConfigException|Exception If the `$siteId` isn't set*
      */
     protected static function indexExists(): bool
     {

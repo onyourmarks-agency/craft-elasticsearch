@@ -24,14 +24,11 @@ use oym\elasticsearch\models\IndexableElementModel;
  */
 class IndexElementJob extends BaseJob
 {
-    /** @var int Id of the site */
-    public $siteId;
+    public int $siteId;
 
-    /*** @var int Id of the element to index */
-    public $elementId;
+    public int $elementId;
 
-    /*** @var string Type of Element to index */
-    public $type;
+    public string $type;
 
     /**
      * @inheritdoc

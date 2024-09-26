@@ -9,10 +9,10 @@ use Throwable;
 
 class IndexableElementModelException extends Exception
 {
-    public const ELEMENT_NOT_FOUND = 0;
-    public const CRAFT_COMMERCE_NOT_INSTALLED = 1;
-    public const UNEXPECTED_TYPE = 2;
-    public const DIGITAL_PRODUCTS_NOT_INSTALLED = 3;
+    public const int ELEMENT_NOT_FOUND = 0;
+    public const int CRAFT_COMMERCE_NOT_INSTALLED = 1;
+    public const int UNEXPECTED_TYPE = 2;
+    public const int DIGITAL_PRODUCTS_NOT_INSTALLED = 3;
 
 
     public function __construct(IndexableElementModel $model, $code, ?Throwable $previous = null)
