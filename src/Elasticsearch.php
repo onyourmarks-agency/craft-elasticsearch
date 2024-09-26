@@ -272,7 +272,7 @@ class Elasticsearch extends Plugin
     public function beforeSaveSettings(): bool
     {
         $settings = $this->getSettings();
-        $settings->elasticsearchComponentConfig = null;
+        $settings->elasticsearchComponentConfig = [];
         return parent::beforeSaveSettings();
     }
 

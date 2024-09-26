@@ -121,7 +121,7 @@ class SettingsModel extends Model
 
     public function afterValidate(): void
     {
-        if ($this->elasticsearchComponentConfig !== null) {
+        if (!empty($this->elasticsearchComponentConfig)) {
             parent::afterValidate();
             return;
         }

@@ -29,7 +29,7 @@
 <div class="elastic-branding-container">
     <h2>{{ 'Elasticsearch connection'|t('elasticsearch') }}</h2>
 
-    {% if settings['elasticsearchComponentConfig'] is not null %}
+    {% if settings['elasticsearchComponentConfig'] is not empty %}
         <p class="warning with-icon">{{ 'These settings will be ignored since <code>elasticsearchComponentConfig</code> is present in the configuration file.'|t('elasticsearch')|raw }}</p>
     {% endif %}
 
