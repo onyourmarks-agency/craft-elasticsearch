@@ -56,7 +56,7 @@ class CpController extends Controller
 
         $settings = $elasticsearchPlugin->getSettings();
 
-        if ($elasticsearchPlugin->service->testConnection() === true) {
+        if ($elasticsearchPlugin->service::testConnection() === true) {
             Craft::$app->session->setNotice(
                 Craft::t(
                     Elasticsearch::PLUGIN_HANDLE,

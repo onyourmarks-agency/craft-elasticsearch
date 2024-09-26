@@ -69,7 +69,7 @@ class RefreshElasticsearchIndexUtility extends Utility
     public static function badgeCount(): int
     {
         try {
-            if (!Elasticsearch::getInstance()->service->testConnection() || !Elasticsearch::getInstance()->service->isIndexInSync()) {
+            if (!Elasticsearch::getInstance()->service::testConnection() || !Elasticsearch::getInstance()->service->isIndexInSync()) {
                 return 1;
             }
         } catch (\Exception $e) {
@@ -99,7 +99,7 @@ class RefreshElasticsearchIndexUtility extends Utility
         return Craft::$app->getView()->renderTemplate(
             'elasticsearch/cp/utility',
             [
-                'isConnected'                => Elasticsearch::getInstance()->service->testConnection(),
+                'isConnected'                => Elasticsearch::getInstance()->service::testConnection(),
                 'inSync'                     => Elasticsearch::getInstance()->service->isIndexInSync(),
                 'sites'                      => ArrayHelper::map(Craft::$app->sites->getAllSites(), 'id', 'name'),
                 'notConnectedWarningMessage' => Craft::t(

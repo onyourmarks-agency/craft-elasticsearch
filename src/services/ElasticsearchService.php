@@ -52,7 +52,7 @@ class ElasticsearchService extends Component
      * currently in use in the yii2-elasticsearch instance.
      * @return boolean `true` if the connection succeeds, `false` otherwise.
      */
-    public function testConnection(): bool
+    public static function testConnection(): bool
     {
         try {
             $elasticConnection = ElasticsearchPlugin::getConnection();
@@ -89,7 +89,7 @@ class ElasticsearchService extends Component
                 static function (): bool {
                     Craft::debug('isIndexInSync cache miss', __METHOD__);
 
-                    if (!$this->testConnection()) {
+                    if (!$this::testConnection()) {
                         return false;
                     }
 

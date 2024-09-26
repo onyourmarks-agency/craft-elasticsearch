@@ -137,7 +137,7 @@ class SettingsModel extends Model
             $elasticsearchPlugin->initializeElasticConnector($this);
 
             // Run the actual validation
-            if (!$elasticsearchPlugin->service->testConnection()) {
+            if (!$elasticsearchPlugin->service::testConnection()) {
                 throw new InvalidConfigException('Could not connect to the Elasticsearch server.');
             }
         } catch (InvalidConfigException $e) {
