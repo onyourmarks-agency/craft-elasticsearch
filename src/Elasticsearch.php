@@ -300,7 +300,7 @@ class Elasticsearch extends Plugin
             $settings = $this->getSettings();
         }
 
-        if ($settings->elasticsearchComponentConfig !== null) {
+        if (!empty($settings->elasticsearchComponentConfig)) {
             $definition = $settings->elasticsearchComponentConfig;
         } else {
             $protocol = parse_url($settings->elasticsearchEndpoint, PHP_URL_SCHEME);

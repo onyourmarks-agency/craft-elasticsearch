@@ -77,7 +77,7 @@ class SettingsModel extends Model
      * @note If this is set, the $elasticsearchEndpoint, $username, $password and $isAuthEnabled properties will be ignored.
      * @see  https://www.yiiframework.com/extension/yiisoft/yii2-elasticsearch/doc/api/2.1/yii-elasticsearch-connection#properties
      */
-    public ?array $elasticsearchComponentConfig;
+    public array $elasticsearchComponentConfig = [];
 
     /**
      * An associative array defining additional fields to be indexed along with the defaults one.
