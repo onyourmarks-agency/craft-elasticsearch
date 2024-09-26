@@ -316,12 +316,12 @@ Each field should be declared by using associative array with keys representing 
 to configure the field behavior:
 
 *   `mapping` (optional): an associative array providing the elasticsearch mapping definition for the field.
-    For more complex mapping, you can also use a callback (`function (\lhs\elasticsearch\records\ElasticsearchRecord $esRecord)`) to return the associative array.
+    For more complex mapping, you can also use a callback (`function (\oym\elasticsearch\records\ElasticsearchRecord $esRecord)`) to return the associative array.
     For example:
 
     ```php
     ...
-    'mapping' => function (\lhs\elasticsearch\records\ElasticsearchRecord $esRecord) {
+    'mapping' => function (\oym\elasticsearch\records\ElasticsearchRecord $esRecord) {
         return [
             'type'     => 'text',
             'store'    => true,
@@ -333,7 +333,7 @@ to configure the field behavior:
 *   `highlighter` (optional): an object defining the elasticsearch highlighter behavior for the field.
     To know more about that configuration, refer to the documentation [here](https://www.elastic.co/guide/en/elasticsearch/reference/6.7/search-request-highlighting.html).
 *   `value`: either a string or a callable function taking one argument of `craft\base\Element` type and returning the value of the field.
-    Second argument can be used to access the related `lhs\elasticsearch\records\ElasticsearchRecord` instance.
+    Second argument can be used to access the related `oym\elasticsearch\records\ElasticsearchRecord` instance.
 
 For example, to declare a `color` field in the configuration file, one could do:
 
@@ -346,7 +346,7 @@ For example, to declare a `color` field in the configuration file, one could do:
             'store' => true
         ],
         'highlighter' => (object)[],
-        'value'       => function (\craft\base\ElementInterface $element, \lhs\elasticsearch\records\ElasticsearchRecord $esRecord) {
+        'value'       => function (\craft\base\ElementInterface $element, \oym\elasticsearch\records\ElasticsearchRecord $esRecord) {
             // $esRecord->whatEverMethod();
             return ArrayHelper::getValue($element, 'color.hex');
         }

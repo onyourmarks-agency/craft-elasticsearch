@@ -85,7 +85,7 @@ class Elasticsearch extends Plugin
 
         // Add console commands
         if (Craft::$app instanceof ConsoleApplication) {
-            $this->controllerNamespace = 'lhs\elasticsearch\console\controllers';
+            $this->controllerNamespace = 'oym\elasticsearch\console\controllers';
         }
 
         if (Craft::$app->getRequest()->getIsCpRequest()) {
