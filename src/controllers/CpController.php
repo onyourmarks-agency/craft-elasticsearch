@@ -178,8 +178,8 @@ class CpController extends Controller
         $request = Craft::$app->getRequest();
 
         $model = new IndexableElementModel();
-        $model->elementId = $request->getRequiredBodyParam('params.elementId');
-        $model->siteId = $request->getRequiredBodyParam('params.siteId');
+        $model->elementId = (int) $request->getRequiredBodyParam('params.elementId');
+        $model->siteId = (int) $request->getRequiredBodyParam('params.siteId');
         $model->type = $request->getRequiredBodyParam('params.type');
         $element = $model->getElement();
 

@@ -141,12 +141,6 @@ class ElementIndexerService extends Component
             }
         }
 
-        if (!$element->hasContent()) {
-            $message = "Not indexing entry #{$element->id} since it has no content.";
-            Craft::debug($message, __METHOD__);
-            return $message;
-        }
-
         if (!$element->getUrl()) {
             $message = "Not indexing entry #{$element->id} since it has no URL.";
             Craft::debug($message, __METHOD__);
@@ -238,6 +232,11 @@ class ElementIndexerService extends Component
 
         // Generate the sharable url based on the previously generated token
         $url = UrlHelper::urlWithToken($element->getUrl(), $token);
+
+        // [OYM] Add fix to prevent cURL error, caused by the SSL certificate in our Docker environment is "invalid"
+        if (getenv('CRAFT_ENVIRONMENT') === 'dev') {
+            $url = str_replace('https://', 'http://', $url);
+        }
 
         // Request the page content with GuzzleHttp\Client
         $client = new \GuzzleHttp\Client(['connect_timeout' => 10]);

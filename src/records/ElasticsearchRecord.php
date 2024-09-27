@@ -48,8 +48,8 @@ class ElasticsearchRecord extends ActiveRecord
     private mixed $_schema;
     private array $_attributes = ['title', 'url', 'elementHandle', 'content', 'postDate', 'expiryDate', 'noPostDate', 'noExpiryDate'];
     private Element $_element;
-    private mixed $_queryParams;
-    private mixed $_highlightParams;
+    private array $_queryParams = [];
+    private array $_highlightParams = [];
     private array $_searchFields = ['attachment.content', 'title'];
 
     public static function type(): string
@@ -427,7 +427,7 @@ class ElasticsearchRecord extends ActiveRecord
      */
     public function getQueryParams(string $query): mixed
     {
-        if ($this->_queryParams === null) {
+        if (empty($this->_queryParams)) {
             $currentTimeDb = Db::prepareDateForDb(new \DateTime());
             $this->_queryParams = [
                 'bool' => [
@@ -480,19 +480,19 @@ class ElasticsearchRecord extends ActiveRecord
     }
 
     /**
-     * @param mixed $queryParams
+     * @param array $queryParams
      */
-    public function setQueryParams(mixed $queryParams): void
+    public function setQueryParams(array $queryParams): void
     {
         $this->_queryParams = $queryParams;
     }
 
     /**
-     * @return mixed
+     * @return array
      */
-    public function getHighlightParams(): mixed
+    public function getHighlightParams(): array
     {
-        if (is_null($this->_highlightParams)) {
+        if (empty($this->_highlightParams)) {
             $this->_highlightParams = ArrayHelper::merge(
                 ElasticsearchPlugin::getInstance()->settings->highlight,
                 [
@@ -506,9 +506,9 @@ class ElasticsearchRecord extends ActiveRecord
     }
 
     /**
-     * @param mixed $highlightParams
+     * @param array $highlightParams
      */
-    public function setHighlightParams(mixed $highlightParams): void
+    public function setHighlightParams(array $highlightParams): void
     {
         $this->_highlightParams = $highlightParams;
     }
