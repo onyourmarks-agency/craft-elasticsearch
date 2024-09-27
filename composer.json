@@ -25,8 +25,7 @@
     "require": {
         "craftcms/cms": "^5.0.0",
         "yiisoft/yii2-elasticsearch": "^2.1.0",
-        "craftcms/commerce": "^5.1",
-        "craftcms/digital-products": "^4.0"
+        "oym/craft-utilities": "^4.3"
     },
     "autoload": {
         "psr-4": {
@@ -45,5 +44,11 @@
             "yiisoft/yii2-composer": true,
             "craftcms/plugin-installer": true
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://onyourmarks.repo.repman.io"
+        }
+    ]
 }
