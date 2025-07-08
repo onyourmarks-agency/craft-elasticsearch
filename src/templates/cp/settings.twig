@@ -140,7 +140,7 @@
             {% for section in craft.app.entries.allSections %}
                 {% for entryType in section.entryTypes %}
                     <tr data-id="default">
-                        <th>{{ section.type|ucfirst }}</th>
+                        <th>{{ section.type|capitalize }}</th>
                         <td>{{ section.name }}</td>
                         <td>{{ entryType.name }}</td>
                         <td>
